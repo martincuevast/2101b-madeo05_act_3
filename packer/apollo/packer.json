@@ -1,0 +1,39 @@
+{
+  "variables": {
+    "access_key": "AKIAYNTYVWHWNTA4TDYO",
+    "secret_key": "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"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "access_key": "{{user `access_key`}}",
+      "secret_key": "{{user `secret_key`}}",
+      "region": "us-east-1",
+      "source_ami": "ami-04b107e90218672e5",
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "ami_name": "packer-mean-stack-{{timestamp}}"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo apt-get update -y",
+        "sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common gnupg",
+        "curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -",
+        "echo 'deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse' | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list",
+        "sudo apt-get update -y",
+        "sudo apt-get install -y mongodb-org",
+        "sudo systemctl start mongod",
+        "sudo systemctl enable mongod",
+        "curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -",
+        "sudo apt-get install -y nodejs",
+        "sudo npm install -g npm@latest",
+        "sudo npm install -g pm2",
+        "sudo apt-get install -y nginx",
+        "sudo rm -f /etc/nginx/sites-enabled/default"
+      ]
+    }
+  ]
+}
