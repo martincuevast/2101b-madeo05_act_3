@@ -44,7 +44,7 @@ resource "aws_instance" "elastic-stack" {
               EOF
 
   tags = {
-    Name = "Mongo-Instance"
+    Name = "elastic-Instance"
   }
 }
 
